@@ -401,6 +401,15 @@
         </button>
 
         <div id="content" class="grid"></div>
+        
+        <div style="text-align:center; margin:20px 0; font-size:0.85rem;">
+    <button class="back-btn" style="background:#f0f0f0; color:#667eea; border:1px solid #667eea; margin-right:8px;" onclick="showTerms()">
+        Terms & Conditions
+    </button>
+    <button class="back-btn" style="background:#f0f0f0; color:#667eea; border:1px solid #667eea;" onclick="showPrivacy()">
+        Privacy Policy
+    </button>
+        </div>
     </div>
 
     <script>
@@ -680,8 +689,51 @@
                 case 'content':
                     selectSubject(selectedSubject);
                     break;
-            }
+           }
+            switch (currentView) {
+        case 'variants': renderProviders(); break;
+        case 'subjects': selectProvider(selectedProvider); break;
+        case 'options': selectVariant(selectedVariant); break;
+        case 'content': selectSubject(selectedSubject); break;
+        case 'terms':
+        case 'privacy':
+            renderProviders(); break;
+         }
+
         }
+        function showTerms() {
+    currentView = 'terms';
+    document.getElementById('backBtn').classList.remove('hidden');
+    document.getElementById('breadcrumb').classList.remove('hidden');
+    document.getElementById('breadcrumb').innerHTML = '<span>Home</span> › <span>Terms & Conditions</span>';
+
+    const content = document.getElementById('content');
+    content.className = '';
+    content.innerHTML = `
+        <div class="content-frame">
+            <h2>Terms & Conditions</h2>
+            <p>Welcome to Sahu Academy. These terms govern your use of our app...</p>
+            <!-- Add your full text here -->
+        </div>
+    `;
+}
+
+function showPrivacy() {
+    currentView = 'privacy';
+    document.getElementById('backBtn').classList.remove('hidden');
+    document.getElementById('breadcrumb').classList.remove('hidden');
+    document.getElementById('breadcrumb').innerHTML = '<span>Home</span> › <span>Privacy Policy</span>';
+
+    const content = document.getElementById('content');
+    content.className = '';
+    content.innerHTML = `
+        <div class="content-frame">
+            <h2>Privacy Policy</h2>
+            <p>Your privacy is important to us. Sahu Academy collects minimal data...</p>
+            <!-- Add your full privacy text here -->
+        </div>
+    `;
+}
 
         // Initialize
         renderProviders();
