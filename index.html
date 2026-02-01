@@ -689,16 +689,15 @@
                 case 'content':
                     selectSubject(selectedSubject);
                     break;
-           }
-            switch (currentView) {
-        case 'variants': renderProviders(); break;
-        case 'subjects': selectProvider(selectedProvider); break;
-        case 'options': selectVariant(selectedVariant); break;
-        case 'content': selectSubject(selectedSubject); break;
-        case 'terms':
-        case 'privacy':
-            renderProviders(); break;
-         }
+                    
+                    case 'variants': renderProviders(); break;
+                    case 'subjects': selectProvider(selectedProvider); break;
+                    case 'options': selectVariant(selectedVariant); break;
+                    case 'content': selectSubject(selectedSubject); break;
+                    case 'terms':
+                    case 'privacy':
+                      renderProviders(); break;
+                  }
 
         }
         function showTerms() {
