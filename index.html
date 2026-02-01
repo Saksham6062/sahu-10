@@ -1,1 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Models Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px;
+            padding-bottom: 80px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 16px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        header p {
+            opacity: 0.9;
+            margin-top: 4px;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .breadcrumb span {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .breadcrumb .separator {
+            color: #ccc;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .back-btn:active {
+            background: #667eea;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        /* First page - 2 columns for company cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        /* Other pages - 1 column */
+        .grid.single-column {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .card:active {
+            transform: scale(0.97);
+            border-color: #667eea;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .card p {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Variant cards - single column, horizontal layout */
+        .variant-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .variant-card .card-icon {
+            margin-bottom: 0;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 6px;
+        }
+
+        .variant-card .card-text {
+            text-align: left;
+        }
+
+        .variant-card h3 {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .variant-card p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+        }
+
+        /* Subject cards - single column, horizontal layout */
+        .subject-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .subject-card .subject-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .subject-card h3 {
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        /* Option cards - single column, horizontal layout */
+        .option-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .option-card .option-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .option-card h3 {
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .content-frame {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .content-frame h2 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .content-frame .url-display {
+            background: #f5f7fa;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #666;
+            word-break: break-all;
+            margin: 16px 0;
+            font-size: 0.75rem;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .content-frame .placeholder-text {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .content-frame iframe {
+            width: 100%;
+            height: 60vh;
+            min-height: 300px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        /* Better touch targets */
+        @media (hover: none) and (pointer: coarse) {
+            .card {
+                min-height: 48px;
+            }
+            
+            .back-btn {
+                min-height: 44px;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 360px) {
+            .container {
+                padding: 8px;
+            }
+
+            header h1 {
+                font-size: 1.1rem;
+            }
+
+            .card {
+                padding: 12px 8px;
+            }
+
+            .card-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+            .card h3 {
+                font-size: 0.75rem;
+            }
+
+            .variant-card, .subject-card, .option-card {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .variant-card h3, .subject-card h3, .option-card h3 {
+                font-size: 0.9rem;
+            }
+
+            .subject-icon, .option-icon {
+                width: 42px !important;
+                height: 42px !important;
+                font-size: 1.6rem !important;
+            }
+        }
+
+        /* Larger phones / tablets */
+        @media (min-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            header {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .grid {
+                gap: 14px;
+            }
+
+            .card {
+                padding: 18px 14px;
+            }
+
+            .card-icon {
+                width: 52px;
+                height: 52px;
+            }
+
+            .card h3 {
+                font-size: 0.95rem;
+            }
+
+            .variant-card, .subject-card, .option-card {
+                padding: 20px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Safe area for notched phones */
+        @supports (padding: env(safe-area-inset-bottom)) {
+            .container {
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Models Learning Hub</h1>
+            <p>Select a model provider to explore</p>
+        </header>
+
+        <div id="breadcrumb" class="breadcrumb hidden"></div>
+        <button id="backBtn" class="back-btn hidden" onclick="goBack()">
+            ← Back
+        </button>
+
+        <div id="content" class="grid"></div>
+    </div>
+
+    <script>
+        // ============================================
+        // URL CONFIGURATION - REPLACE WITH YOUR URLS
+        // ============================================
+        const URLS = {
+            // Example structure:
+            // "Google": {
+            //     "Gemini 3 Flash": {
+            //         "HINDI": {
+            //             "EXERCISE": "https://your-exercise-url.com",
+            //             "OTHER IMPORTANT": "https://your-important-url.com",
+            //             "VIDEO": "https://your-video-url.com"
+            //         },
+            //         "ENGLISH": { ... },
+            //         ...
+            //     },
+            //     ...
+            // },
+            // Add your URLs following this pattern
+        };
+
+        // Company logos using official/public URLs
+        const companyLogos = {
+            "Google": "https://www.google.com/favicon.ico",
+            "OpenAI": "https://openai.com/favicon.ico",
+            "Alibaba": "https://www.alibabagroup.com/favicon.ico",
+            "Mistral": "https://mistral.ai/favicon.ico",
+            "MoonshotAI": "https://www.moonshot.cn/favicon.ico",
+            "LiquidAI": "https://www.liquid.ai/favicon.ico",
+            "AcreeAI": "https://acree.ai/favicon.ico",
+            "Meta": "https://www.meta.com/favicon.ico",
+            "DeepSeek": "https://www.deepseek.com/favicon.ico",
+            "Anthropic": "https://anthropic.com/favicon.ico",
+            "ZAI": "https://z.ai/favicon.ico",
+            "XAI": "https://x.ai/favicon.ico",
+            "Baidu": "https://www.baidu.com/favicon.ico",
+            "MAI": "https://mai.ai/favicon.ico",
+            "MiniMaxAI": "https://www.minimaxi.com/favicon.ico",
+            "AllenAI": "https://allenai.org/favicon.ico",
+            "NVIDIA": "https://www.nvidia.com/favicon.ico"
+        };
+
+        // SVG fallback logos for companies
+        const companySVGs = {
+            "Google": `<svg viewBox="0 0 24 24" width="48" height="48"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>`,
+            "OpenAI": `<svg viewBox="0 0 24 24" width="48" height="48"><path fill="#000000" d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.0993 3.8558L12.6 8.3829l2.02-1.1638a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997z"/></svg>`,
+            "Alibaba": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#FF6A00"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Ali</text></svg>`,
+            "Mistral": `<svg viewBox="0 0 24 24" width="48" height="48"><rect width="24" height="24" rx="4" fill="#000"/><rect x="4" y="4" width="4" height="4" fill="#F7D046"/><rect x="10" y="4" width="4" height="4" fill="#F7D046"/><rect x="16" y="4" width="4" height="4" fill="#F7D046"/><rect x="4" y="10" width="4" height="4" fill="#F7D046"/><rect x="10" y="10" width="4" height="4" fill="#F7D046"/><rect x="16" y="10" width="4" height="4" fill="#F7D046"/><rect x="4" y="16" width="4" height="4" fill="#F7D046"/><rect x="16" y="16" width="4" height="4" fill="#F7D046"/></svg>`,
+            "MoonshotAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#1a1a2e"/><circle cx="14" cy="12" r="8" fill="#f0f0f0"/><circle cx="10" cy="12" r="8" fill="#1a1a2e"/></svg>`,
+            "LiquidAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#00D4FF"/><path d="M12 4c-2 4-6 6-6 10a6 6 0 0 0 12 0c0-4-4-6-6-10z" fill="white"/></svg>`,
+            "AcreeAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#6B46C1"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Acree</text></svg>`,
+            "Meta": `<svg viewBox="0 0 24 24" width="48" height="48"><path fill="#0668E1" d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>`,
+            "DeepSeek": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#4D6BFE"/><path d="M8 8l8 8M16 8l-8 8" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="white"/></svg>`,
+            "Anthropic": `<svg viewBox="0 0 24 24" width="48" height="48"><rect width="24" height="24" rx="4" fill="#D4A574"/><path d="M12 4L4 20h4l1.5-3h5l1.5 3h4L12 4zm0 6l2 4h-4l2-4z" fill="white"/></svg>`,
+            "ZAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#00CED1"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Z</text></svg>`,
+            "XAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#000"/><text x="12" y="17" text-anchor="middle" fill="white" font-size="14" font-weight="bold">𝕏</text></svg>`,
+            "Baidu": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#2319DC"/><path d="M8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-8 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" fill="white"/></svg>`,
+            "MAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#FF4081"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="9" font-weight="bold">MAI</text></svg>`,
+            "MiniMaxAI": `<svg viewBox="0 0 24 24" width="48" height="48"><rect width="24" height="24" rx="4" fill="#6366F1"/><path d="M6 18V6l6 6 6-6v12" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            "AllenAI": `<svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="11" fill="#2D8CFF"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="7" font-weight="bold">AI2</text></svg>`,
+            "NVIDIA": `<svg viewBox="0 0 24 24" width="48" height="48"><rect width="24" height="24" rx="2" fill="#76B900"/><path d="M9 7v10c3-1 5-3 5-5s-2-4-5-5zm0 2c2 .5 3 2 3 3s-1 2.5-3 3V9z" fill="white"/></svg>`
+        };
+
+        const providers = [
+            { name: "Google", tagline: "Gemini Models" },
+            { name: "OpenAI", tagline: "GPT Models" },
+            { name: "Alibaba", tagline: "Qwen Models" },
+            { name: "Mistral", tagline: "Mistral Models" },
+            { name: "MoonshotAI", tagline: "Kimi Models" },
+            { name: "LiquidAI", tagline: "LFM Models" },
+            { name: "AcreeAI", tagline: "Trinity Models" },
+            { name: "Meta", tagline: "Llama Models" },
+            { name: "DeepSeek", tagline: "DeepSeek Models" },
+            { name: "Anthropic", tagline: "Claude Models" },
+            { name: "ZAI", tagline: "Z Models" },
+            { name: "XAI", tagline: "Grok Models" },
+            { name: "Baidu", tagline: "Ernie Models" },
+            { name: "MAI", tagline: "MiMo Models" },
+            { name: "MiniMaxAI", tagline: "MiniMax Models" },
+            { name: "AllenAI", tagline: "Olmo Models" },
+            { name: "NVIDIA", tagline: "Nemotron Models" }
+        ];
+
+        const modelVariants = {
+            "Google": ["Gemini 3 Flash", "Gemini 3 Pro"],
+            "OpenAI": ["GPT 5.2 Pro", "GPT 5.1 Pro"],
+            "Alibaba": ["Qwen 3 Max", "Qwen 3-Thinking"],
+            "Mistral": ["Mistral Large", "Devstral 2"],
+            "MoonshotAI": ["Kimi K2.5 Thinking", "Kimi K2 Thinking"],
+            "LiquidAI": ["LFM2.5 Thinking", "LFM 2.5 Instruct"],
+            "AcreeAI": ["Trinity Large", "Trinity Mini"],
+            "Meta": ["Llama 4 Maverick", "Llama 4 Scout", "Llama 3.3"],
+            "DeepSeek": ["DeepSeek V3.2", "DeepSeek R1"],
+            "Anthropic": ["Opus 4.5 Thinking", "Opus 4.5", "Sonnet 4.5 Thinking", "Sonnet 4.5"],
+            "ZAI": ["Z1 Pro", "Z1 Lite"],
+            "XAI": ["Grok 4.1 Thinking", "Grok 4.1 Reasoning"],
+            "Baidu": ["Ernie 5", "Ernie 4.5 VL", "GLM 4.7", "GLM 4.7 Flash"],
+            "MAI": ["MiMo V2 Flash", "MiMo V2 Flash Thinking"],
+            "MiniMaxAI": ["MiniMax M2.1 Preview", "MiniMax M2"],
+            "AllenAI": ["Molmo 2", "Olmo 3.1-Think"],
+            "NVIDIA": ["Nemotron 30B", "Nemotron 12B VL"]
+        };
+
+        const subjects = [
+            { name: "HINDI", icon: "📚" },
+            { name: "ENGLISH", icon: "📖" },
+            { name: "SANSKRIT", icon: "📜" },
+            { name: "MATHEMATICS", icon: "🔢" },
+            { name: "SCIENCE", icon: "🔬" },
+            { name: "SOCIAL SCIENCE", icon: "🌍" }
+        ];
+
+        const options = [
+            { name: "EXERCISE", icon: "✍️" },
+            { name: "OTHER IMPORTANT", icon: "⭐" },
+            { name: "VIDEO", icon: "🎬" }
+        ];
+
+        let currentView = 'providers';
+        let selectedProvider = null;
+        let selectedVariant = null;
+        let selectedSubject = null;
+        let selectedOption = null;
+
+        function getLogoHTML(providerName) {
+            return companySVGs[providerName] || `<div style="width:48px;height:48px;background:#667eea;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:16px;">${providerName.charAt(0)}</div>`;
+        }
+
+        function renderProviders() {
+            currentView = 'providers';
+            selectedProvider = null;
+            selectedVariant = null;
+            selectedSubject = null;
+            selectedOption = null;
+
+            document.getElementById('breadcrumb').classList.add('hidden');
+            document.getElementById('backBtn').classList.add('hidden');
+
+            const content = document.getElementById('content');
+            content.className = 'grid';
+            content.innerHTML = providers.map(provider => `
+                <div class="card" onclick="selectProvider('${provider.name}')">
+                    <div class="card-icon">
+                        ${getLogoHTML(provider.name)}
+                    </div>
+                    <h3>${provider.name}</h3>
+                    <p>${provider.tagline}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectProvider(name) {
+            currentView = 'variants';
+            selectedProvider = name;
+
+            updateBreadcrumb();
+            document.getElementById('backBtn').classList.remove('hidden');
+
+            const variants = modelVariants[name] || [];
+            const content = document.getElementById('content');
+            content.className = 'grid single-column';
+            content.innerHTML = variants.map(variant => `
+                <div class="card variant-card" onclick="selectVariant('${variant}')">
+                    <div class="card-icon">
+                        ${getLogoHTML(name)}
+                    </div>
+                    <div class="card-text">
+                        <h3>${variant}</h3>
+                        <p>${name}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectVariant(name) {
+            currentView = 'subjects';
+            selectedVariant = name;
+
+            updateBreadcrumb();
+
+            const content = document.getElementById('content');
+            content.className = 'grid single-column';
+            content.innerHTML = subjects.map(subject => `
+                <div class="card subject-card" onclick="selectSubject('${subject.name}')">
+                    <div class="subject-icon">${subject.icon}</div>
+                    <h3>${subject.name}</h3>
+                </div>
+            `).join('');
+        }
+
+        function selectSubject(name) {
+            currentView = 'options';
+            selectedSubject = name;
+
+            updateBreadcrumb();
+
+            const content = document.getElementById('content');
+            content.className = 'grid single-column';
+            content.innerHTML = options.map(option => `
+                <div class="card option-card" onclick="selectOption('${option.name}')">
+                    <div class="option-icon">${option.icon}</div>
+                    <h3>${option.name}</h3>
+                </div>
+            `).join('');
+        }
+
+        function selectOption(name) {
+            currentView = 'content';
+            selectedOption = name;
+
+            updateBreadcrumb();
+
+            // Get URL from configuration or use placeholder
+            let url = "";
+            try {
+                url = URLS[selectedProvider]?.[selectedVariant]?.[selectedSubject]?.[name] || "";
+            } catch (e) {
+                url = "";
+            }
+
+            const content = document.getElementById('content');
+            content.className = '';
+            
+            if (url) {
+                // If URL is configured, show iframe
+                content.innerHTML = `
+                    <div class="content-frame">
+                        <h2>${selectedOption}</h2>
+                        <p>${selectedProvider} > ${selectedVariant} > ${selectedSubject}</p>
+                        <iframe src="${url}" allowfullscreen></iframe>
+                    </div>
+                `;
+            } else {
+                // Show placeholder with URL path for configuration
+                const urlPath = `URLS["${selectedProvider}"]["${selectedVariant}"]["${selectedSubject}"]["${name}"]`;
+                content.innerHTML = `
+                    <div class="content-frame">
+                        <h2>${selectedOption}</h2>
+                        <p style="color:#666;margin-bottom:20px;">${selectedProvider} > ${selectedVariant} > ${selectedSubject}</p>
+                        <div style="font-size:4rem;margin:20px 0;">📄</div>
+                        <p class="placeholder-text">No content URL configured yet</p>
+                        <div class="url-display">
+                            <strong>Add your URL here in the code:</strong><br><br>
+                            ${urlPath} = "YOUR_URL_HERE"
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            breadcrumb.classList.remove('hidden');
+
+            let parts = ['<span>Home</span>'];
+            if (selectedProvider) parts.push(`<span class="separator">›</span><span>${selectedProvider}</span>`);
+            if (selectedVariant) parts.push(`<span class="separator">›</span><span>${selectedVariant}</span>`);
+            if (selectedSubject) parts.push(`<span class="separator">›</span><span>${selectedSubject}</span>`);
+            if (selectedOption) parts.push(`<span class="separator">›</span><span>${selectedOption}</span>`);
+
+            breadcrumb.innerHTML = parts.join('');
+        }
+
+        function goBack() {
+            switch (currentView) {
+                case 'variants':
+                    renderProviders();
+                    break;
+                case 'subjects':
+                    selectProvider(selectedProvider);
+                    break;
+                case 'options':
+                    selectVariant(selectedVariant);
+                    break;
+                case 'content':
+                    selectSubject(selectedSubject);
+                    break;
+            }
+        }
+
+        // Initialize
+        renderProviders();
+    </script>
+</body>
+</html>
