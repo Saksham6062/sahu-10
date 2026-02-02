@@ -394,6 +394,12 @@
             <h1>Sahu Academy</h1>
             <p>AI Models Learning Hub</p>
         </header>
+        <div class="card" style="background:linear-gradient(135deg,#34d399,#10b981);color:white;"
+            onclick="installAndroidApp()">
+          <div class="card-icon">⬇️</div>
+          <h3 style="color:white;">Install Android App</h3>
+          <p style="color:rgba(255,255,255,0.85);">Sahu Academy</p>
+        </div>
 
         <div id="breadcrumb" class="breadcrumb hidden"></div>
         <button id="backBtn" class="back-btn hidden" onclick="goBack()">
@@ -529,6 +535,14 @@
             { name: "OTHER IMPORTANT", icon: "⭐" },
             { name: "VIDEO", icon: "🎬" }
         ];
+         function installAndroidApp() {
+          // 🔗 REPLACE this with your real Android app / PWA / APK URL
+              window.open(
+               "https://saksham6062.github.io/sahu-10/",
+               "_blank"
+              );
+             
+         }
 
         let currentView = 'providers';
         let selectedProvider = null;
